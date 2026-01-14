@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #ffafcc, #ffc8dd, #cdb4db, #bde0fe);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            padding: 20px;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+        
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            bottom: -5px;
+            left: 0;
+            background: linear-gradient(90deg, #ff4d6d, #ff8fab);
+            border-radius: 5px;
+        }
+        
+        .subtitle {
+            color: #6d6875;
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .heart-icon {
+            color: #ff4d6d;
+            margin: 0 10px;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .question {
+            font-size: 1.8rem;
+            margin: 30px 0;
+            color: #590d22;
+            font-weight: bold;
+        }
+        
+        .buttons-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 20px 50px;
+            font-size: 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            min-width: 180px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            z-index: 1;
+        }
+        
+        .btn-yes {
+            background: linear-gradient(135deg, #ff4d6d, #ff8fab);
+            color: white;
+        }
+        
+        .btn-no {
+            background: linear-gradient(135deg, #6d6875, #b5838d);
+            color: white;
+        }
+        
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+            z-index: -1;
+        }
+        
+        .btn:hover::before {
+            left: 100%;
+        }
+        
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        /* 爱心惊喜页面样式 */
+        .surprise-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ff4d6d, #ff8fab);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 0.8s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .surprise-content {
+            max-width: 600px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .surprise-title {
+            color: #ff4d6d;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .message {
+            font-size: 1.5rem;
+            color: #590d22;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .love-message {
+            font-style: italic;
+            color: #ff4d6d;
+            margin-top: 20px;
+            font-size: 1.3rem;
+        }
+        
+        /* 爱心动画 */
+        .hearts-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            animation: floatUp 5s linear infinite;
+            bottom: -50px;
+        }
+        
+        @keyframes floatUp {
+            to {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        /* 不喜欢按钮效果 */
+        .no-effect {
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+        
+        .enlarging {
+            animation: enlarge 0.5s forwards;
+            z-index: 100;
+        }
+        
+        @keyframes enlarge {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.5); }
+        }
+        
+        .runaway {
+            animation: runAway 0.5s ease-out;
+        }
+        
+        @keyframes runAway {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(100vw - 100%)); }
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .question { font-size: 1.5rem; }
+            .btn { padding: 18px 40px; font-size: 1.3rem; min-width: 150px; }
+            .buttons-container { gap: 20px; }
+            .surprise-title { font-size: 2.5rem; }
+            .message { font-size: 1.3rem; }
+        }
+        
+        @media (max-width: 480px) {
+            h1 { font-size: 1.8rem; }
+            .question { font-size: 1.3rem; }
+            .btn { padding: 15px 30px; font-size: 1.2rem; min-width: 130px; }
+            .buttons-container { flex-direction: column; align-items: center; }
+            .surprise-title { font-size: 2rem; }
+            .message { font-size: 1.1rem; }
+        }
+        
+        footer {
+            margin-top: 30px;
+            color: #6d6875;
+            font-size: 0.9rem;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .music-control {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+        
+        .music-control i {
+            font-size: 24px;
+            color: #ff4d6d;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div class="container">
+        
+                <div class="question">
+            亲爱的心心
+        </div>
+        <div class="question">
+            你愿意一直和我在一起吗？<i class="fas fa-heart heart-icon"></i>
+        </div>
+        
+        <div class="buttons-container">
+            <button class="btn btn-yes" id="yesBtn">
+                <i class="fas fa-heart"></i> 当然愿意！
+            </button>
+            <button class="btn btn-no" id="noBtn">
+                <i class="fas fa-times"></i> 不愿意...
+            </button>
+        </div>
+        
+
+    </div>
+    
+    <!-- 爱心惊喜页面 -->
+    <div class="surprise-page" id="surprisePage">
+        <div class="hearts-container" id="heartsContainer"></div>
+        <div class="surprise-content">
+            <h2 class="surprise-title">
+                <i class="fas fa-heart"></i>  
+            </h2>
+            
+            <div class="message">
+                <p>爱你哦宝宝</p>
+                <p class="love-message">
+                  
+                </p>
+            </div>
+            
+            <button class="btn btn-yes" id="backBtn" style="margin-top: 20px;">
+                <i class="fas fa-redo"></i> 再体验一次
+            </button>
+        </div>
+    </div>
+    
+    
+    <!-- 背景音乐 -->
+    <audio id="bgMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-loving-you-117.mp3" type="audio/mpeg">
+    </audio>
+    
+    <script>
+        // 获取DOM元素
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const surprisePage = document.getElementById('surprisePage');
+        const heartsContainer = document.getElementById('heartsContainer');
+        const backBtn = document.getElementById('backBtn');
+        const musicControl = document.getElementById('musicControl');
+        const bgMusic = document.getElementById('bgMusic');
+        
+        // 点击"喜欢"按钮
+        yesBtn.addEventListener('click', function() {
+            // 显示惊喜页面
+            surprisePage.style.display = 'flex';
+            
+            // 创建爱心动画
+            createHearts();
+            
+            // 播放音乐
+            bgMusic.play().catch(e => console.log("自动播放被阻止，请手动点击音乐按钮"));
+            
+            // 添加一些庆祝效果
+            celebrate();
+        });
+        
+        // 点击"不喜欢"按钮的交互效果
+        let noClicks = 0;
+        let yesBtnEnlarged = false;
+        
+        noBtn.addEventListener('click', function() {
+            noClicks++;
+            
+            // 前几次点击，喜欢按钮会变大
+            if (noClicks <= 3 && !yesBtnEnlarged) {
+                yesBtn.classList.add('enlarging');
+                setTimeout(() => {
+                    yesBtn.classList.remove('enlarging');
+                    yesBtn.style.transform = `scale(${1 + noClicks * 0.2})`;
+                }, 500);
+                
+                if (noClicks === 3) {
+                    yesBtnEnlarged = true;
+                }
+            } 
+            // 之后点击，不喜欢按钮会逃跑
+            else {
+                // 让"不喜欢"按钮逃跑
+                this.classList.add('runaway');
+                
+                // 改变按钮文字
+                const messages = ["再想想...", "你确定吗？", "真的不再考虑？", "别点我啦！", "我要逃跑了！"];
+                const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+                this.innerHTML = `<i class="fas fa-running"></i> ${randomMsg}`;
+                
+                // 移动按钮到随机位置
+                setTimeout(() => {
+                    this.classList.remove('runaway');
+                    
+                    // 随机位置
+                    const container = document.querySelector('.buttons-container');
+                    const containerRect = container.getBoundingClientRect();
+                    const btnRect = this.getBoundingClientRect();
+                    
+                    const maxX = containerRect.width - btnRect.width;
+                    const maxY = containerRect.height - btnRect.height;
+                    
+                    const randomX = Math.random() * maxX;
+                    const randomY = Math.random() * maxY;
+                    
+                    this.style.position = 'absolute';
+                    this.style.left = `${randomX}px`;
+                    this.style.top = `${randomY}px`;
+                }, 500);
+                
+                // 如果点击超过8次，直接跳转到惊喜页面
+                if (noClicks >= 8) {
+                    setTimeout(() => {
+                        yesBtn.click();
+                    }, 300);
+                }
+            }
+            
+            // 每次点击都改变按钮文字
+            const noMessages = ["再想想...", "真的吗？", "你确定？", "再考虑一下", "别这样嘛", "给我个机会"];
+            this.innerHTML = `<i class="fas fa-times"></i> ${noMessages[Math.min(noClicks - 1, noMessages.length - 1)] || "好吧..."}`;
+        });
+        
+        // 创建爱心动画函数
+        function createHearts() {
+            // 清空现有爱心
+            heartsContainer.innerHTML = '';
+            
+            // 创建50个爱心
+            for (let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                
+                // 随机位置
+                heart.style.left = `${Math.random() * 100}%`;
+                
+                // 随机大小
+                const size = Math.random() * 20 + 10;
+                heart.style.fontSize = `${size}px`;
+                
+                // 随机动画延迟
+                heart.style.animationDelay = `${Math.random() * 5}s`;
+                
+                // 随机颜色
+                const colors = ['#ff4d6d', '#ff8fab', '#ffafcc', '#ffc8dd', '#ffddd2'];
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // 庆祝效果
+        function celebrate() {
+            // 创建一些闪烁效果
+            const container = document.querySelector('.container');
+            const colors = ['#ff4d6d', '#ff8fab', '#ffafcc', '#ffc8dd', '#cdb4db', '#bde0fe'];
+            
+            let flashCount = 0;
+            const flashInterval = setInterval(() => {
+                if (flashCount >= 10) {
+                    clearInterval(flashInterval);
+                    document.body.style.backgroundColor = '';
+                    return;
+                }
+                
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                document.body.style.backgroundColor = randomColor;
+                
+                flashCount++;
+            }, 200);
+        }
+        
+        // 返回按钮
+        backBtn.addEventListener('click', function() {
+            surprisePage.style.display = 'none';
+            // 重置状态
+            noClicks = 0;
+            yesBtnEnlarged = false;
+            yesBtn.style.transform = 'scale(1)';
+            noBtn.style.position = 'static';
+            noBtn.style.left = '';
+            noBtn.style.top = '';
+            noBtn.innerHTML = '<i class="fas fa-times"></i> 再想想...';
+            noBtn.classList.remove('runaway');
+        });
+        
+        // 音乐控制
+        let musicPlaying = false;
+        musicControl.addEventListener('click', function() {
+            if (musicPlaying) {
+                bgMusic.pause();
+                this.innerHTML = '<i class="fas fa-music"></i>';
+            } else {
+                bgMusic.play();
+                this.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            musicPlaying = !musicPlaying;
+        });
+        
+        // 初始化：创建一些浮动爱心背景
+        function initBackgroundHearts() {
+            const bgHeartsContainer = document.createElement('div');
+            bgHeartsContainer.className = 'hearts-container';
+            document.body.appendChild(bgHeartsContainer);
+            
+            for (let i = 0; i < 20; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '<i class="fas fa-heart"></i>';
+                
+                heart.style.left = `${Math.random() * 100}%`;
+                
+                const size = Math.random() * 15 + 5;
+                heart.style.fontSize = `${size}px`;
+                
+                heart.style.animationDelay = `${Math.random() * 10}s`;
+                heart.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                
+                const colors = ['rgba(255, 77, 109, 0.2)', 'rgba(255, 143, 171, 0.2)', 'rgba(255, 175, 204, 0.2)'];
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                
+                bgHeartsContainer.appendChild(heart);
+            }
+        }
+        
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', initBackgroundHearts);
+    </script>
+</body>
+</html>
